@@ -1,0 +1,120 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.login-container {
+  max-width: 500px;
+  background: #ffffff;
+  margin: 40px auto;
+  padding: 30px 40px 50px;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+  border-top: 5px solid #0b5ed7; /* Blue Govt Bar */
+  animation: slideDownFade 0.5s ease;
+}
+
+@keyframes slideDownFade {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+.login-container h2 {
+  text-align: center;
+  color: #0b5ed7;
+  margin-bottom: 25px;
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #212529;
+}
+
+select,
+input[type="date"],
+input[type="text"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+select:focus,
+input[type="date"]:focus,
+input[type="text"]:focus {
+  border-color: #0b5ed7;
+  outline: none;
+  box-shadow: 0 0 5px rgba(11, 94, 215, 0.3);
+}
+
+button {
+  margin-top: 25px;
+  padding: 12px;
+  background-color: #0b5ed7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #0949ab;
+  transform: translateY(-2px);
+}
+
+.choices__inner {
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+}
+
+.choices_list--multiple .choices_item {
+  background-color: #e6f0ff;
+  border: 1px solid #b3d1ff;
+  color: #0b5ed7;
+  font-size: 13px;
+  border-radius: 4px;
+  padding: 4px 10px;
+  margin: 4px 4px 0 0;
+}
+
+/* Logo padding */
+.login-container img {
+  margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .login-container {
+    padding: 20px 25px 40px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}

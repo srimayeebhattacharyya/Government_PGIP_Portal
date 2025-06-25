@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Details - PGIP</title>
+
+  <!-- Choices.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+
+  <style>
+    :root {
+      --primary-blue: #0a3d62;
+      --secondary-blue: #1e5f8b;
+      --accent-gold: #e3b04b;
+      --light-gray: #f8f9fa;
+      --medium-gray: #e9ecef;
+      --dark-gray: #212529;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light-gray);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-container {
+      background-color: var(--white);
+      padding: 2.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      border-top: 4px solid var(--primary-blue);
+    }
+
+    .logo {
+      height: 60px;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      color: var(--primary-blue);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    h3 {
+      color: var(--dark-gray);
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    h3::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background-color: var(--accent-gold);
+    }
+
+    form {
+      margin-top: 1rem;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--dark-gray);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    select,
+    input[type="date"] {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 1px solid var(--medium-gray);
+      border-radius: 4px;
+      font-size: 1rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s ease;
+    }
+
+    select:focus,
+    input[type="date"]:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 2px rgba(10, 61, 98, 0.15);
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.875rem;
+      background-color: var(--primary-blue);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background-color: var(--secondary-blue);
+    }
+
+    footer {
+      margin-top: 2rem;
+      color: var(--dark-gray);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <img src="{% static 'logo.png' %}" alt="PGIP Logo" class="logo">
+    <h2>Welcome!<br>Please Complete Your Profile</h2>
+
+    <form action="{% url 'save_details' %}" method="POST">
+      {% csrf_token %}
+
+      <label for="gender">Gender</label>
+      <select id="gender" name="gender" required>
+        <option value="">--Select Gender--</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="dob">Date of Birth</label>
+      <input type="date" id="dob" name="dob" required>
+
+      <label for="interests">Interested Fields</label>
+      <select id="interests" name="interests" multiple required>
+        <option value="Technology">Technology</option>
+        <option value="Health">Health</option>
+        <option value="Education">Education</option>
+        <option value="Agriculture">Agriculture</option>
+        <option value="Finance">Finance</option>
+        <option value="Environment">Environment</option>
+        <option value="Transport">Transport</option>
+        <option value="Science">Science</option>
+        <option value="Women Empowerment">Women Empowerment</option>
+        <option value="Social Welfare">Social Welfare</option>
+      </select>
+
+      <label for="qualification">Educational Qualification</label>
+      <select id="qualification" name="qualification" required>
+        <option value="">--Select Qualification--</option>
+        <option value="highschool">High School</option>
+        <option value="diploma">Diploma</option>
+        <option value="graduate">Graduate</option>
+        <option value="postgraduate">Postgraduate</option>
+        <option value="phd">PhD</option>
+      </select>
+
+      <label for="income">Income</label>
+      <select id="income" name="income" required>
+        <option value="">--Select Income Range--</option>
+        <option value="student">Student</option>
+        <option value="0-1L">0 - 1 Lakh</option>
+        <option value="1L-5L">1 - 5 Lakh</option>
+        <option value="5L-10L">5 - 10 Lakh</option>
+        <option value="10L+">10 Lakh and above</option>
+      </select>
+
+      <label for="employment_type">Employment Type</label>
+      <select id="employment_type" name="employment_type" required>
+        <option value="">--Select Employment Type--</option>
+        <option value="student">Student</option>
+        <option value="unemployed">Unemployed</option>
+        <option value="private">Private Sector</option>
+        <option value="government">Government Employee</option>
+        <option value="self-employed">Self-Employed</option>
+        <option value="retired">Retired</option>
+      </select>
+
+      <label for="caste_category">Caste Category</label>
+      <select id="caste_category" name="caste_category" required>
+        <option value="">--Select Category--</option>
+        <option value="general">General</option>
+        <option value="obc">OBC</option>
+        <option value="sc">SC</option>
+        <option value="st">ST</option>
+        <option value="ews">EWS</option>
+      </select>
+
+      <label for="location">Location</label>
+      <select id="location" name="location" required>
+        <option value="">--Select State/UT--</option>
+        <option value="Andhra Pradesh">Andhra Pradesh</option>
+        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+        <option value="Assam">Assam</option>
+        <option value="Bihar">Bihar</option>
+        <option value="Chhattisgarh">Chhattisgarh</option>
+        <option value="Goa">Goa</option>
+        <option value="Gujarat">Gujarat</option>
+        <option value="Haryana">Haryana</option>
+        <option value="Himachal Pradesh">Himachal Pradesh</option>
+        <option value="Jharkhand">Jharkhand</option>
+        <option value="Karnataka">Karnataka</option>
+        <option value="Kerala">Kerala</option>
+        <option value="Madhya Pradesh">Madhya Pradesh</option>
+        <option value="Maharashtra">Maharashtra</option>
+        <option value="Manipur">Manipur</option>
+        <option value="Meghalaya">Meghalaya</option>
+        <option value="Mizoram">Mizoram</option>
+        <option value="Nagaland">Nagaland</option>
+        <option value="Odisha">Odisha</option>
+        <option value="Punjab">Punjab</option>
+        <option value="Rajasthan">Rajasthan</option>
+        <option value="Sikkim">Sikkim</option>
+        <option value="Tamil Nadu">Tamil Nadu</option>
+        <option value="Telangana">Telangana</option>
+        <option value="Tripura">Tripura</option>
+        <option value="Uttar Pradesh">Uttar Pradesh</option>
+        <option value="Uttarakhand">Uttarakhand</option>
+        <option value="West Bengal">West Bengal</option>
+        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+        <option value="Chandigarh">Chandigarh</option>
+        <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+        <option value="Ladakh">Ladakh</option>
+        <option value="Lakshadweep">Lakshadweep</option>
+        <option value="Puducherry">Puducherry</option>
+      </select>
+
+      <button type="submit">Save &amp; Continue</button>
+    </form>
+
+    <footer>
+      © 2025 Government Portal. All rights reserved.
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      new Choices('#interests', {
+        removeItemButton: true,
+        placeholderValue: 'Select your interests',
+        maxItemCount: 5,
+        searchEnabled: true,
+      });
+    });
+  </script>
+</body>
+</html>

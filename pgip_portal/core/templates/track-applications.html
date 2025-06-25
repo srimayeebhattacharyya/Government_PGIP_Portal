@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="applications-container">
+    <h2><i class="fas fa-clipboard-list"></i> My Applications</h2>
+    
+    <div class="application-list">
+        {% for application in applications %}
+        <div class="application-card status-{{ application.status|lower }}">
+            <div class="application-header">
+                <h4>
+                    {% if application.exam %}
+                        {{ application.exam.name }}
+                    {% else %}
+                        {{ application.scheme.name }}
+                    {% endif %}
+                </h4>
+                <span class="status-badge">{{ application.get_status_display }}</span>
+            </div>
+            
+            <div class="application-details">
+                <p><strong>Applied On:</strong> {{ application.created_at|date:"d M Y" }}</p>
+                {% if application.submitted_at %}
+                <p><strong>Submitted On:</strong> {{ application.submitted_at|date:"d M Y" }}</p>
+                {% endif %}
+            </div>
+            
+            <a href="#" class="btn btn-secondary">View Details</a>
+        </div>
+        {% empty %}
+        <div class="no-applications">
+            <p>You haven't submitted any applications yet.</p>
+            <a href="{% url 'schemes' %}" class="btn btn-primary">Browse Schemes</a>
+            <a href="{% url 'exams' %}" class="btn btn-primary">View Exams</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
