@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Government Portal{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="govt-header">
+        <div class="header-top">
+            <div><img src="{% static 'logo.png' %}" alt="Government Logo" height="40"></div>
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}"><i class="fas fa-user-circle"></i> {{ user.username }}</a>
+                    <a href="{% url 'notifications' %}"><i class="fas fa-bell"></i> Notifications</a>
+                    <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Register</a>
+                {% endif %}
+            </div>
+        </div>
+        {% if user.is_authenticated %}
+        <nav class="main-nav">
+            <ul class="nav-menu">
+                <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="{% url 'documents' %}"><i class="fas fa-file-alt"></i> Documents</a></li>
+                <li><a href="{% url 'exams' %}"><i class="fas fa-graduation-cap"></i> Exams</a></li>
+                <li><a href="{% url 'schemes' %}"><i class="fas fa-hand-holding-heart"></i> Schemes</a></li>
+            </ul>
+        </nav>
+        {% endif %}
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="govt-footer">
+        <div class="footer-content">
+            <!-- Footer content here -->
+        </div>
+        <div class="copyright">
+            © {% now "Y" %} Government Portal. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,126 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .forgot-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 450px;
+    text-align: center;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  
+  .forgot-container img {
+    width: 80px;
+    height: 80px;
+    vertical-align: middle;
+    transition: transform 0.3s ease;
+  }
+  
+  .forgot-container h2 {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+  
+  .forgot-container h3 {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 22px;
+    text-align: left;
+  }
+  
+  .forgot-container input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .forgot-container label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .forgot-container button {
+    width: 100%;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .forgot-container button:hover {
+    background-color: #1666c1;
+  }
+  
+  .forgot-container a {
+    color: #1a73e8;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  
+  .forgot-container a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive Design */
+  
+  /* Tablets and small laptops (<= 768px) */
+  @media (max-width: 768px) {
+    .forgot-container {
+      width: 80%;
+      padding: 25px;
+    }
+  
+    .forgot-container h2 {
+      font-size: 20px;
+    }
+  }
+  
+  /* Phones (<= 480px) */
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+  
+    .forgot-container {
+      width: 100%;
+      padding: 20px;
+      border-radius: 8px;
+    }
+  
+    .forgot-container h2 {
+      font-size: 18px;
+      line-height: 1.4;
+    }
+  
+    .forgot-container input,
+    .forgot-container button {
+      font-size: 14px;
+    }
+  }
+  

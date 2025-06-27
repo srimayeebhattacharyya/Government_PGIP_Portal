@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0f3d6e;
+            --medium-gray: #ddd;
+            --light-gray: #f8f9fa;
+        }
+
+        .dashboard {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .documents-section {
+            margin-top: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .document-upload {
+            border: 2px dashed var(--medium-gray);
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background-color: var(--light-gray);
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .document-upload:hover {
+            border-color: var(--primary-blue);
+            background-color: rgba(15, 61, 110, 0.05);
+        }
+
+        .document-upload i {
+            font-size: 48px;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .document-upload h4 {
+            margin: 10px 0 5px;
+            color: #333;
+        }
+
+        .document-upload p {
+            color: #666;
+            margin: 0;
+        }
+
+        .document-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .document-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            background: white;
+        }
+
+        .document-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .document-icon {
+            font-size: 24px;
+            color: var(--primary-blue);
+        }
+
+        .document-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .document-type {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-document {
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.2s;
+        }
+
+        .btn-document:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-view {
+            color: var(--primary-blue);
+        }
+
+        .btn-download {
+            color: #28a745;
+        }
+
+        .btn-delete {
+            color: #dc3545;
+        }
+
+        /* Loading spinner */
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="dashboard">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="documents">Documents</button>
+                <button class="tab-btn" data-tab="calendar">Calendar</button>
+                <button class="tab-btn" data-tab="jobs">Jobs</button>
+            </div>
+            
+            <div class="tab-content active" id="documents">
+                <section class="documents-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-file-alt"></i> My Documents</h3>
+                        <button class="btn btn-primary" id="upload-document-btn">
+                            <i class="fas fa-upload"></i> Upload Document
+                        </button>
+                    </div>
+                    
+                    <div class="document-upload" id="document-upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h4>Drag & Drop Files Here</h4>
+                        <p>or click to browse files</p>
+                        <input type="file" id="file-input" style="display: none;" multiple>
+                    </div>
+                    
+                    <div class="document-list" id="document-list">
+                        <!-- Documents will be added here dynamically -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize database
+            let db;
+            const DB_NAME = 'DocumentManagerDB';
+            const DB_VERSION = 1;
+            const STORE_NAME = 'documents';
+            
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            
+            request.onupgradeneeded = function(event) {
+                db = event.target.result;
+                if (!db.objectStoreNames.contains(STORE_NAME)) {
+                    db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                }
+            };
+            
+            request.onsuccess = function(event) {
+                db = event.target.result;
+                loadDocuments();
+            };
+            
+            request.onerror = function(event) {
+                console.error('Database error:', event.target.error);
+            };
+            
+            // Document upload functionality
+            const uploadArea = document.getElementById('document-upload-area');
+            const fileInput = document.getElementById('file-input');
+            const uploadBtn = document.getElementById('upload-document-btn');
+            const documentList = document.getElementById('document-list');
+            
+            // Click handlers
+            uploadArea.addEventListener('click', () => fileInput.click());
+            uploadBtn.addEventListener('click', () => fileInput.click());
+            
+            // File input change handler
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    uploadFiles(this.files);
+                }
+            });
+            
+            // Drag and drop setup
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            uploadArea.addEventListener('drop', handleDrop, false);
+            
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+            
+            // Helper functions
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            function highlight() {
+                uploadArea.style.borderColor = 'var(--primary-blue)';
+                uploadArea.style.backgroundColor = 'rgba(15, 61, 110, 0.1)';
+            }
+            
+            function unhighlight() {
+                uploadArea.style.borderColor = 'var(--medium-gray)';
+                uploadArea.style.backgroundColor = 'var(--light-gray)';
+            }
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                fileInput.files = files;
+                
+                if (files.length > 0) {
+                    uploadFiles(files);
+                }
+            }
+            
+            function uploadFiles(files) {
+                // Validate files first
+                const validFiles = Array.from(files).filter(file => {
+                    const fileType = file.type;
+                    const validTypes = [
+                        'image/jpeg', 
+                        'image/png', 
+                        'application/pdf',
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                    ];
+                    
+                    if (file.size > 10 * 1024 * 1024) {
+                        showAlert(`File ${file.name} exceeds 10MB limit and was skipped`, 'warning');
+                        return false;
+                    }
+                    
+                    if (!validTypes.includes(fileType)) {
+                        showAlert(`File type ${fileType} not allowed for ${file.name}`, 'warning');
+                        return false;
+                    }
+                    
+                    return true;
+                });
+                
+                if (validFiles.length === 0) return;
+                
+                // Show loading state
+                uploadArea.innerHTML = '<i class="fas fa-spinner"></i> Uploading files...';
+                
+                // Process each file
+                validFiles.forEach(file => {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const fileData = {
+                            name: file.name,
+                            type: file.type,
+                            size: file.size,
+                            data: e.target.result,
+                            uploadedAt: new Date().toISOString()
+                        };
+                        
+                        // Store in IndexedDB
+                        const transaction = db.transaction([STORE_NAME], 'readwrite');
+                        const store = transaction.objectStore(STORE_NAME);
+                        const request = store.add(fileData);
+                        
+                        request.onsuccess = function() {
+                            fileData.id = request.result;
+                            addDocumentToUI(fileData);
+                            showAlert(`${file.name} uploaded successfully!`, 'success');
+                        };
+                        
+                        request.onerror = function() {
+                            console.error('Error storing file:', request.error);
+                            showAlert(`Error uploading ${file.name}`, 'danger');
+                        };
+                    };
+                    
+                    reader.readAsDataURL(file);
+                });
+                
+                // Reset upload area after processing
+                setTimeout(() => {
+                    resetUploadArea();
+                    fileInput.value = '';
+                }, 1000);
+            }
+            
+            function loadDocuments() {
+                const transaction = db.transaction([STORE_NAME], 'readonly');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.getAll();
+                
+                request.onsuccess = function() {
+                    const documents = request.result;
+                    documents.forEach(doc => {
+                        addDocumentToUI(doc);
+                    });
+                };
+                
+                request.onerror = function() {
+                    console.error('Error loading documents:', request.error);
+                };
+            }
+            
+            function addDocumentToUI(doc) {
+                const documentItem = document.createElement('div');
+                documentItem.className = 'document-item';
+                documentItem.dataset.docId = doc.id;
+                
+                const iconClass = getIconClass(doc.type);
+                const fileType = getFileTypeCategory(doc.type);
+                const fileSize = formatFileSize(doc.size);
+                
+                documentItem.innerHTML = `
+                    <div class="document-info">
+                        <i class="fas ${iconClass} document-icon"></i>
+                        <div>
+                            <div class="document-name">${doc.name}</div>
+                            <div class="document-type">${fileType} • ${fileSize}</div>
+                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <a href="#" class="btn-document btn-view">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        <a href="${doc.data}" class="btn-document btn-download" download="${doc.name}">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="#" class="btn-document btn-delete">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                `;
+                
+                // Add event listeners
+                documentItem.querySelector('.btn-view').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.open(doc.data, '_blank');
+                });
+                
+                documentItem.querySelector('.btn-delete').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm(`Are you sure you want to delete ${doc.name}?`)) {
+                        deleteDocument(doc.id, documentItem);
+                    }
+                });
+                
+                documentList.appendChild(documentItem);
+            }
+            
+            function deleteDocument(docId, element) {
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.delete(docId);
+                
+                request.onsuccess = function() {
+                    element.remove();
+                    showAlert('Document deleted successfully!', 'success');
+                };
+                
+                request.onerror = function() {
+                    console.error('Error deleting document:', request.error);
+                    showAlert('Error deleting document', 'danger');
+                };
+            }
+            
+            function resetUploadArea() {
+                uploadArea.innerHTML = `
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h4>Drag & Drop Files Here</h4>
+                    <p>or click to browse files</p>
+                `;
+            }
+            
+            function showAlert(message, type) {
+                // Simple alert implementation - you could enhance this with a proper alert system
+                alert(`${type.toUpperCase()}: ${message}`);
+            }
+            
+            function getIconClass(fileType) {
+                if (!fileType) return 'fa-file';
+                if (fileType.includes('pdf')) return 'fa-file-pdf';
+                if (fileType.includes('image')) return 'fa-file-image';
+                if (fileType.includes('word')) return 'fa-file-word';
+                if (fileType.includes('excel')) return 'fa-file-excel';
+                if (fileType.includes('powerpoint')) return 'fa-file-powerpoint';
+                if (fileType.includes('zip')) return 'fa-file-archive';
+                return 'fa-file';
+            }
+            
+            function getFileTypeCategory(fileType) {
+                if (!fileType) return 'File';
+                if (fileType.includes('pdf')) return 'Document';
+                if (fileType.includes('image')) return 'Image';
+                if (fileType.includes('video')) return 'Video';
+                if (fileType.includes('audio')) return 'Audio';
+                if (fileType.includes('word')) return 'Document';
+                return 'File';
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+</body>
+</html>
