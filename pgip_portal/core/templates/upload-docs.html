@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="documents-container">
+    <h2><i class="fas fa-file-upload"></i> Upload Required Documents</h2>
+    
+    <div class="document-requirements">
+        <h4>Required Documents:</h4>
+        <ul>
+            <li>Aadhaar Card (Front and Back)</li>
+            <li>PAN Card (If available)</li>
+            <li>Caste Certificate (If applicable)</li>
+        </ul>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" class="upload-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Aadhaar Card (Front)</label>
+            <input type="file" name="aadhaar_front" accept="image/*,.pdf" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Aadhaar Card (Back)</label>
+            <input type="file" name="aadhaar_back" accept="image/*,.pdf" required>
+        </div>
+        
+        <div class="form-group">
+            <label>PAN Card (Optional)</label>
+            <input type="file" name="pan_card" accept="image/*,.pdf">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Upload Documents</button>
+    </form>
+</div>
+{% endblock %}

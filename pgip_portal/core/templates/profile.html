@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+  <style>
+    :root {
+      --primary-blue: #0f3d6e;
+      --secondary-blue: #1a5a92;
+      --light-gray: #f5f5f5;
+      --medium-gray: #e0e0e0;
+      --dark-gray: #333333;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--light-gray);
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .login-container {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 1000px;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-top: 4px solid var(--primary-blue);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary-blue);
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--dark-gray);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--medium-gray);
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 2px rgba(15, 61, 110, 0.2);
+      outline: none;
+      background-color: var(--white);
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--primary-blue);
+      color: var(--white);
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    button:hover {
+      background-color: var(--secondary-blue);
+    }
+
+    img {
+      display: block;
+      margin: 0 auto 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    @media (max-width: 576px) {
+      .login-container {
+        padding: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <img src="{% static 'logo.png' %}" alt="PGIP Logo" style="width: 70px;">
+    <h2>Welcome!<br>Please Complete Your Profile</h2>
+
+    <form action="{% url 'user_profile_view' %}" method="POST">
+
+      {% csrf_token %}
+
+      <div class="grid">
+        <div><label>First Name</label><input type="text" name="first_name" required></div>
+        <div><label>Middle Name</label><input type="text" name="middle_name"></div>
+        <div><label>Last Name</label><input type="text" name="last_name" required></div>
+        <div><label>Father's Name</label><input type="text" name="father_name" required></div>
+        <div><label>Mother's Name</label><input type="text" name="mother_name" required></div>
+        
+ 
+        <div><label>Marital Status</label>
+          <select name="marital_status" required>
+            <option value="">--Select--</option>
+            <option value="single">Single</option>
+            <option value="married">Married</option>
+            <option value="divorced">Divorced</option>
+            <option value="widowed">Widowed</option>
+          </select>
+        </div>
+        <div><label>Urban/Rural</label>
+          <select name="urban_rural" required>
+            <option value="">--Select--</option>
+            <option value="urban">Urban</option>
+            <option value="rural">Rural</option>
+          </select>
+        </div>
+        <div><label>Religion</label>
+          <select name="religion" required>
+            <option value="">--Select Religion--</option>
+            <option value="hindu">Hindu</option>
+            <option value="muslim">Muslim</option>
+            <option value="christian">Christian</option>
+            <option value="sikh">Sikh</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div><label>Category</label>
+          <select name="category" required>
+            <option value="">--Select--</option>
+            <option value="general">General</option>
+            <option value="obc">OBC</option>
+            <option value="sc">SC</option>
+            <option value="st">ST</option>
+            <option value="ews">EWS</option>
+          </select>
+        </div>
+        <div><label>Any Disability</label>
+          <select name="disability" required>
+            <option value="">--Select--</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        <div><label>Ex-Serviceman</label>
+          <select name="ex_serviceman" required>
+            <option value="">--Select--</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        <div><label>Priority for Ex-Service</label>
+          <select name="priority_ex_service" required>
+            <option value="">--Select--</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        <div><label>Eyesight</label>
+          <select name="eyesight" required>
+            <option value="">--Select--</option>
+            <option value="normal">Normal</option>
+            <option value="corrected">Corrected</option>
+            <option value="impaired">Impaired</option>
+          </select>
+        </div>
+        <div><label>Chest (cms)</label><input type="number" name="chest" min="0"></div>
+        <div><label>Height (cms)</label><input type="number" name="height" min="0"></div>
+        <div><label>Weight (kg)</label><input type="number" name="weight" min="0"></div>
+        <div><label>Address</label><input type="text" name="address" required></div>
+        <div><label>Pin</label><input type="text" name="pin" required></div>
+        <div><label>Locality</label><input type="text" name="locality" required></div>
+        
+        <div><label>Mobile No</label><input type="text" name="mobile" required></div>
+        <div><label>Email</label><input type="email" name="email" required></div>
+        <div><label>Telephone No</label><input type="text" name="tel"></div>
+      </div>
+
+      <button type="submit">Save</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+</body>
+</html>
