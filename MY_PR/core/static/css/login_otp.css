@@ -1,0 +1,66 @@
+/* Body background */
+body {
+    background-color: #f3f0ff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Centered login container */
+.login-container {
+    max-width: 485px;
+    max-height: 485px;
+    margin: 144px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(90, 28, 207, 0.2);
+    border-top: 6px solid #5a1ccf;
+}
+
+/* Heading */
+.login-container h3 {
+    text-align: center;
+    color: #5a1ccf;
+    margin-bottom: 24px;
+    font-weight: 600;
+}
+
+/* Input field styling */
+.login-container .form-label {
+    color: #333;
+    font-weight: 500;
+}
+
+.login-container input {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.login-container input:focus {
+    border-color: #5a1ccf;
+    box-shadow: 0 0 0 0.2rem rgba(90, 28, 207, 0.2);
+}
+
+/* Send OTP Button */
+.btn-glow {
+    background-color: #5a1ccf;
+    border: none;
+    color: white;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(90, 28, 207, 0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-glow:hover {
+    background-color: #4a17b0;
+    box-shadow: 0 0 14px rgba(90, 28, 207, 0.5);
+}

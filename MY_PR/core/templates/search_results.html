@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{% static 'css/search_results.css' %}">
+    
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">🔍 Search Results for "{{ query }}"</h1>
+
+    <!-- Exams -->
+    <h2>📘 Exams</h2>
+    {% if exams %}
+        <ul class="list-group mb-4">
+            {% for exam in exams %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ exam.name }} - {{ exam.date }}
+                <a href="{% url 'exam_detail' exam.id %}" class="btn btn-outline-success btn-sm">View & Apply</a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No matching exams found.</p>
+    {% endif %}
+
+    <!-- Schemes -->
+    <h2>🏛️ Schemes</h2>
+    {% if schemes %}
+        <ul class="list-group">
+            {% for scheme in schemes %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ scheme.name }} ({{ scheme.type }})
+                <a href="{% url 'scheme_detail' scheme.id %}" class="btn btn-outline-primary btn-sm">View & Apply</a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No matching schemes found.</p>
+    {% endif %}
+
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary mt-4">Back to Dashboard</a>
+</div>
+</body>
+</html>

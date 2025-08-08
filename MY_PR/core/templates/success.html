@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Success</title>
+    <link rel="stylesheet" href="{% static 'css/suc_cess.css' %}">
+    
+</head>
+<body>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow p-4 text-center" style="max-width: 500px; width: 100%;">
+        <div class="card-body">
+            <h2 class="text-success mb-3">🎉 Registration Successful!</h2>
+            <p class="fs-5">You have successfully registered for the selected <strong>{{ item_type|title }}</strong>.</p>
+            <a href="{% url 'dashboard' %}" class="btn btn-primary mt-3">← Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

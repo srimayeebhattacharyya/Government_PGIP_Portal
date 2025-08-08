@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .navbar {
+      background-color: #003366;
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      margin-right: 1.2rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #ffd700;
+    }
+
+    .navbar a.active {
+      color: #ffd700;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      text-align: center;
+      color: #003366;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .list-group {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .list-group-item {
+      padding: 1.2rem 1rem;
+      border-bottom: 1px solid #ddd;
+      font-size: 1rem;
+    }
+
+    .list-group-item strong {
+      color: #003366;
+      display: inline-block;
+      width: 100px;
+    }
+
+    .list-group-item a {
+      color: #003366;
+      text-decoration: none;
+    }
+
+    .list-group-item a:hover {
+      text-decoration: underline;
+    }
+
+    .btn-sm {
+      font-size: 0.875rem;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid #ffd700;
+      color: #ffd700;
+      background: transparent;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-sm:hover {
+      background-color: #ffd700;
+      color: #003366;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navbar a {
+        margin: 0.5rem 0;
+      }
+
+      .container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'profile' %}">Profile</a>
+      <a href="{% url 'calendar' %}">Calendar</a>
+      <a href="{% url 'documents' %}">My Documents</a>
+      <a href="{% url 'contact' %}" class="active">Contact Us</a>
+    </div>
+    <div class="nav-right">
+      {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="btn-sm">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn-sm">Login</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Main Contact Section -->
+  <div class="container">
+    <h2>📞 Contact Us</h2>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <strong>Email:</strong> <a href="mailto:support@example.com">support@example.com</a>
+      </li>
+      <li class="list-group-item">
+        <strong>Phone:</strong> +91-1234567890
+      </li>
+      <li class="list-group-item">
+        <strong>Address:</strong> 123, Sector 4, New Delhi, India
+      </li>
+    </ul>
+  </div>
+
+</body>
+</html>

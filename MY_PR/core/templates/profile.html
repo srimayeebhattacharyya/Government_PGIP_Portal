@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{% static 'css/profiles.css' %}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'calendar' %}">Calendar</a>
+            <a href="{% url 'documents' %}">My Documents</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+        </div>
+        <div class="nav-right">
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>My Profile</h2>
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- First Name -->
+            <label for="id_first_name">First Name:</label>
+            {{ user_form.first_name }}
+
+            <!-- Last Name -->
+            <label for="id_last_name">Last Name:</label>
+            {{ user_form.last_name }}
+
+            <!-- Email (disabled) -->
+            <label for="id_email">Email:</label>
+            <input type="email" value="{{ request.user.email }}" disabled class="form-control"/>
+
+            <!-- Gender -->
+            <label for="id_gender">Gender:</label>
+            {{ profile_form.gender }}
+
+            <!-- Other Profile Fields -->
+            <label for="id_college">College:</label>
+            {{ profile_form.college }}
+
+            <label for="id_dob">Date of Birth:</label>
+            {{ profile_form.dob }}
+
+            <label for="id_education">Education:</label>
+            {{ profile_form.education }}
+
+            <label for="id_income">Income:</label>
+            {{ profile_form.income }}
+
+            <label for="id_location">Location:</label>
+            {{ profile_form.location }}
+
+            <label for="id_religion">Religion:</label>
+            {{ profile_form.religion }}
+
+            <label for="id_caste">Caste:</label>
+            {{ profile_form.caste }}
+
+              <div class="interests-container">
+    <label>Interests:</label>
+    <div class="interest-options">
+        {% for value, label in profile_form.fields.interests.choices %}
+            <label class="interest-option {% if value in profile_form.initial.interests %}selected{% endif %}">
+                <input type="checkbox" name="interests" value="{{ value }}"
+                       {% if value in profile_form.initial.interests %}checked{% endif %} hidden>
+                {{ label }}
+            </label>
+        {% endfor %}
+    </div>
+</div>
+            </div>
+
+            <div class="form-actions">
+        <button type="submit" class="update-btn">Update Profile</button>
+    </div>
+        </form>
+    </div>
+    <script>
+    document.querySelectorAll('.interest-option').forEach(option => {
+        option.addEventListener('click', function(e) {
+            e.preventDefault(); // prevent label default behavior
+            this.classList.toggle('selected');
+            const checkbox = this.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+        });
+    });
+</script>
+
+</body>
+</html>

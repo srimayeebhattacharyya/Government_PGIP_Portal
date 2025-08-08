@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam Detail</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>{{ exam.name }}</h2>
+        <p><strong>Exam Date:</strong> {{ exam.date }}</p>
+
+        <h3>Enrollment Form (Demo Only)</h3>
+        <form method="post">
+            {% csrf_token %}
+            <label>Your Name:</label><br>
+            <input type="text" name="name" required><br><br>
+            <label>Email:</label><br>
+            <input type="email" name="email" required><br><br>
+            <input type="submit" value="Register">
+        </form>
+
+        {% if registered %}
+            <p style="color: green;">You are successfully registered (demo only).</p>
+        {% endif %}
+    </div>
+</body>
+</html>
