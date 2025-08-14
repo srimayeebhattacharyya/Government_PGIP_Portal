@@ -222,9 +222,8 @@ select {
 .form-actions {
   margin-top: 2rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center; /* Center horizontally */
 }
-
 .update-btn {
   background: var(--primary);
   color: white;
