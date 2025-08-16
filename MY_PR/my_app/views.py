@@ -62,8 +62,7 @@ def demo_register(request, item_type, item_id):
 def registration_success(request):
     return render(request, 'success.html')
 
-def profile_view(request):
-    return render(request, 'profile.html')
+
 
 def contact_view(request):
     return render(request, 'contact.html')
@@ -246,8 +245,9 @@ def scheme_detail(request, scheme_id):
 
 
 def profile_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
-
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(request.POST, instance=profile)
@@ -264,4 +264,15 @@ def profile_view(request):
         'profile_form': profile_form
     })
 
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import Document  # if you have a Document model
+
+@login_required(login_url='login')
+def documents_view(request):
+    documents = Document.objects.filter(user=request.user)  # example
+    return render(request, 'documents.html', {'documents': documents})
 
