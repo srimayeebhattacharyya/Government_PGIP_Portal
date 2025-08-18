@@ -1,0 +1,177 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/DASHBOard.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+    <div class="nav-left">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'calendar' %}">Calendar</a>
+        <a href="{% url 'documents' %}">My Documents</a>
+        <a href="{% url 'contact' %}">Contact Us</a>
+    </div>
+    <div class="nav-right">
+        <button id="dark-toggle" class="dark-btn"><i class="fas fa-moon"></i></button>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Page Layout -->
+<div class="page-grid">
+
+    <!-- Sidebar Filters -->
+    <aside class="sidebar">
+        <h3>Filters</h3>
+        <form id="filter-form">
+            <div class="filter-group">
+                <h4>Exam Type</h4>
+                <label><input type="checkbox" name="exam_type" value="government"> Government</label><br>
+                <label><input type="checkbox" name="exam_type" value="private"> Private</label><br>
+                <label><input type="checkbox" name="exam_type" value="state"> State Level</label><br>
+                <label><input type="checkbox" name="exam_type" value="national"> National Level</label><br>
+            </div>
+            <div class="filter-group">
+                <h4>Location</h4>
+                <label><input type="checkbox" name="location" value="delhi"> Delhi / NCR</label><br>
+                <label><input type="checkbox" name="location" value="bengaluru"> Bengaluru</label><br>
+                <label><input type="checkbox" name="location" value="mumbai"> Mumbai</label><br>
+                <label><input type="checkbox" name="location" value="kolkata"> West Bengal</label><br>
+                <label><input type="checkbox" name="location" value="hyderabad"> Hyderabad</label><br>
+                <label><input type="checkbox" name="location" value="chennai"> Chennai</label><br>
+                <label><input type="checkbox" name="location" value="all_india"> All India</label><br>
+            </div>
+            <div class="filter-group">
+                <h4>Category</h4>
+                <label><input type="checkbox" name="category" value="engineering"> Engineering</label><br>
+                <label><input type="checkbox" name="category" value="medical"> Medical</label><br>
+                <label><input type="checkbox" name="category" value="banking"> Banking</label><br>
+                <label><input type="checkbox" name="category" value="defense"> Defense</label><br>
+                <label><input type="checkbox" name="category" value="civil_services"> Civil Services</label><br>
+                <label><input type="checkbox" name="category" value="teaching"> Teaching</label><br>
+            </div>
+            <div class="filter-group">
+                <h4>Mode</h4>
+                <label><input type="checkbox" name="mode" value="online"> Online</label><br>
+                <label><input type="checkbox" name="mode" value="offline"> Offline</label><br>
+                <label><input type="checkbox" name="mode" value="both"> Both</label><br>
+            </div>
+            <div class="filter-group">
+                <h4>Scheme Type</h4>
+                <label><input type="checkbox" name="scheme_type" value="central"> Central Government</label><br>
+                <label><input type="checkbox" name="scheme_type" value="state"> State Government</label><br>
+                <label><input type="checkbox" name="scheme_type" value="welfare"> Welfare</label><br>
+                <label><input type="checkbox" name="scheme_type" value="scholarship"> Scholarship</label><br>
+                <label><input type="checkbox" name="scheme_type" value="loan"> Loan</label><br>
+            </div>
+            <div class="filter-group">
+                <h4>Eligibility</h4>
+                <label><input type="checkbox" name="eligibility" value="10th"> 10th Pass</label><br>
+                <label><input type="checkbox" name="eligibility" value="12th"> 12th Pass</label><br>
+                <label><input type="checkbox" name="eligibility" value="graduate"> Graduate</label><br>
+                <label><input type="checkbox" name="eligibility" value="post_graduate"> Post Graduate</label><br>
+            </div>
+            <div class="filter-group">
+                <h4>Sort By</h4>
+                <select name="sort" id="sort-by">
+                    <option value="date_asc">Date (Oldest First)</option>
+                    <option value="date_desc" selected>Date (Newest First)</option>
+                    <option value="name_asc">Name (A-Z)</option>
+                    <option value="name_desc">Name (Z-A)</option>
+                </select>
+            </div>
+            <button type="button" id="apply-filters" class="filter-button">Apply Filters</button>
+            <button type="button" id="reset-filters" class="filter-button">Reset Filters</button>
+        </form>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <!-- Search -->
+        <form method="get" action="{% url 'search_results' %}" class="search-bar">
+            <input type="text" name="q" placeholder="Search exams or schemes..." required>
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+
+        <!-- Exams Section -->
+        <h2 class="section-title">Upcoming Exams</h2>
+        <div class="card-grid" id="exams-container">
+            {% for exam in exams %}
+            <div class="card" 
+                data-exam-type="{% cycle 'government' 'private' 'state' 'national' 'government' %}"
+                data-location="{% cycle 'delhi' 'kolkata' 'bengaluru' 'all_india' 'mumbai' 'hyderabad' %}"
+                data-category="{% cycle 'engineering' 'civil_services' 'banking' 'medical' 'defense' %}"
+                data-mode="{% cycle 'online' 'offline' 'both' 'online' 'offline' %}"
+                data-eligibility="{% cycle '12th' 'graduate' 'post_graduate' '12th' 'graduate' %}"
+                data-date="{{ exam.date|date:'Y-m-d' }}">
+                <div class="card-header">
+                    <h3>{{ exam.name }}</h3>
+                    <p class="rating"><i class="fas fa-calendar-alt"></i> {{ exam.date }}</p>
+                </div>
+                <div class="card-tags">
+                    <span class="tag">{% cycle 'Government' 'Private' 'State Level' 'National Level' 'Government' %}</span>
+                    <span class="tag">{% cycle 'Online' 'Offline' 'Both' 'Online' 'Offline' %}</span>
+                    <span class="tag">{% cycle 'Engineering' 'Civil Services' 'Banking' 'Medical' 'Defense' %}</span>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'exam_detail' exam.id %}" class="view-link" target="_blank"><i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Schemes Section -->
+        <h2 class="section-title">Government Schemes</h2>
+        <div class="card-grid" id="schemes-container">
+            {% for scheme in schemes %}
+            <div class="card"
+                data-scheme-type="{% cycle 'central' 'state' 'welfare' 'scholarship' 'loan' %}"
+                data-location="{% cycle 'all_india' 'delhi' 'kollata' 'bengaluru' 'mumbai' 'hyderabad' %}"
+                data-category="{% cycle 'engineering' 'medical' 'banking' 'civil_services' 'teaching' %}"
+                data-eligibility="{% cycle '10th' '12th' 'graduate' 'post_graduate' '12th' %}">
+                <div class="card-header">
+                    <h3>{{ scheme.name }}</h3>
+                    <p class="rating"><i class="fas fa-tags"></i> {{ scheme.type }}</p>
+                </div>
+                <div class="card-tags">
+                    <span class="tag">{% cycle 'Central' 'State' 'Welfare' 'Scholarship' 'Loan' %}</span>
+                    <span class="tag">{% cycle 'Engineering' 'Medical' 'Banking' 'Civil Services' 'Teaching' %}</span>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'scheme_detail' scheme.id %}" class="view-link" target="_blank"><i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+    
+        
+    </main>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+<script src="{% static 'js/Dark.js' %}"></script>
+</body>
+<footer class="footer">
+    <div class="footer-links"> 
+    © 2025 PGIP |<a href="#">Policy</a> |<a href="{% url 'contact' %}">Contact Us</a>
+    <p>
+        We provide free job alert service to job seekers in India on latest government jobs and important scheme details
+    </p>
+</footer>
+</html>
