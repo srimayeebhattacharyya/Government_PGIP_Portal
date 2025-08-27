@@ -7,7 +7,6 @@ from pathlib import Path
 import os
 from decouple import config, Csv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ======================
@@ -15,10 +14,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ======================
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='.vercel.app,localhost,127.0.0.1', cast=Csv())
+
+# On Vercel, your app runs under *.vercel.app
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='.vercel.app,localhost,127.0.0.1',
+    cast=Csv()
+)
 
 # ======================
-# Application definition
+# Applications
 # ======================
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,11 +32,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # your apps
     'my_app',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # Whitenoise for static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,13 +102,21 @@ USE_TZ = True
 # Static & Media Files
 # ======================
 STATIC_URL = '/static/'
+
+# where collectstatic will dump files (important for Vercel)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# local dev static files (if you have them)
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'core', 'static')]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Whitenoise config
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # ======================
-# Auth
+# Authentication
 # ======================
 LOGIN_URL = '/login/'
 
