@@ -6,5 +6,5 @@ The system allows users to create accounts by entering detailed personal data in
 
 The platform integrates AI-powered recommendation systems and rule-based filtering mechanisms to ensure accurate content delivery. Users will also receive personalized alerts, document checklists, and eligibility notifications to streamline their application processes.
 
-This solution addresses the information overload problem and ensures efficient dissemination of government services, fostering greater public awareness, engagement, and accessibility — especially for underserved populations.﻿# Government_PGIP_Portal
+This solution addresses the information overload problem and ensures efficient dissemination of government services, fostering greater public awareness, engagement, and accessibility — especially for underserved populations.
 
