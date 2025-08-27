@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/DASHBOARD.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <!-- Brand -->
+        <div class="nav-brand">
+            
+            <i class="fas fa-graduation-cap"></i>
+            <span>PGIP</span>
+        </div>
+
+        <!-- Left Links -->
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="active"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a>
+            <a href="{% url 'calendar' %}"><i class="fas fa-calendar"></i> Calendar</a>
+            <a href="{% url 'recommendations' %}"><i class="fas fa-lightbulb"></i> Recommendations</a>
+            <a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact Us</a>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="nav-right">
+            <button id="dark-toggle" class="dark-btn"><i class="fas fa-moon"></i></button>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+            {% endif %}
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+
+    <!-- Messages Display -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Page Layout -->
+    <div class="page-grid">
+
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+            <h3>Filters</h3>
+            <form id="filter-form">
+                <!-- Exam Type -->
+                <div class="filter-group">
+                    <h4>Exam Type</h4>
+                    <label><input type="checkbox" name="exam_type" value="government"> Government</label><br>
+                    <label><input type="checkbox" name="exam_type" value="private"> Private</label><br>
+                    <label><input type="checkbox" name="exam_type" value="state"> State Level</label><br>
+                    <label><input type="checkbox" name="exam_type" value="national"> National Level</label><br>
+                </div>
+
+                <!-- Location -->
+                <div class="filter-group">
+                    <h4>Location</h4>
+                    <label><input type="checkbox" name="location" value="delhi"> Delhi</label><br>
+                    <label><input type="checkbox" name="location" value="bengaluru"> Bengaluru</label><br>
+                    <label><input type="checkbox" name="location" value="mumbai"> Mumbai</label><br>
+                    <label><input type="checkbox" name="location" value="west-bengal"> West Bengal</label><br>
+                    <label><input type="checkbox" name="location" value="hyderabad"> Hyderabad</label><br>
+                    <label><input type="checkbox" name="location" value="chennai"> Chennai</label><br>
+                    <label><input type="checkbox" name="location" value="all-india"> All India</label><br>
+                </div>
+
+                <!-- Category -->
+                <div class="filter-group">
+                    <h4>Category</h4>
+                    <label><input type="checkbox" name="category" value="engineering"> Engineering</label><br>
+                    <label><input type="checkbox" name="category" value="medical"> Medical</label><br>
+                    <label><input type="checkbox" name="category" value="banking"> Banking</label><br>
+                    <label><input type="checkbox" name="category" value="defense"> Defense</label><br>
+                    <label><input type="checkbox" name="category" value="civil-services"> Civil Services</label><br>
+                    <label><input type="checkbox" name="category" value="teaching"> Teaching</label><br>
+                </div>
+
+                <!-- Mode -->
+                <div class="filter-group">
+                    <h4>Mode</h4>
+                    <label><input type="checkbox" name="mode" value="online"> Online</label><br>
+                    <label><input type="checkbox" name="mode" value="offline"> Offline</label><br>
+                    <label><input type="checkbox" name="mode" value="both"> Both</label><br>
+                </div>
+
+                <!-- Scheme Type -->
+                <div class="filter-group">
+                    <h4>Scheme Type</h4>
+                    <label><input type="checkbox" name="scheme_type" value="central"> Central Government</label><br>
+                    <label><input type="checkbox" name="scheme_type" value="state"> State Government</label><br>
+                    <label><input type="checkbox" name="scheme_type" value="welfare"> Welfare</label><br>
+                    <label><input type="checkbox" name="scheme_type" value="scholarship"> Scholarship</label><br>
+                    <label><input type="checkbox" name="scheme_type" value="loan"> Loan</label><br>
+                </div>
+
+                
+                <!-- Sort -->
+                <div class="filter-group">
+                    <h4>Sort By</h4>
+                    <select name="sort" id="sort-by">
+                        <option value="date_asc">Date (Oldest First)</option>
+                        <option value="date_desc" selected="">Date (Newest First)</option>
+                        <option value="name_asc">Name (A-Z)</option>
+                        <option value="name_desc">Name (Z-A)</option>
+                    </select>
+                </div>
+
+                <button type="button" id="apply-filters" class="filter-button">Apply Filters</button>
+                <button type="button" id="reset-filters" class="filter-button">Reset Filters</button>
+            </form>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content">
+
+            <!-- Search -->
+            <form method="get" action="{% url 'search_results' %}" class="search-bar">
+                <input type="text" name="q" placeholder="Search exams or schemes..." required>
+                <button type="submit">Search</button>
+            </form>
+
+            <!-- Exams Section -->
+            <h2 class="section-title">Upcoming Exams</h2>
+            <div class="card-grid" id="exams-container">
+                {% for exam in exams %}
+                <div class="card" data-exam-type="{{ exam.exam_type|default_if_none:'government'|lower|slugify }}" data-location="{% if exam.location and 'ncr' in exam.location|lower %}delhi{% else %}{{ exam.location|default_if_none:'all-india'|lower|slugify }}{% endif %}" data-category="{{ exam.category|default_if_none:'general'|lower|slugify }}" data-mode="{{ exam.mode|default_if_none:'online'|lower|slugify }}" data-date="{{ exam.date|date:'Y-m-d' }}">
+                    <div class="card-header">
+                        <h3>{{ exam.name }}</h3>
+                        <p class="rating"><i class="fas fa-calendar-alt"></i> {{ exam.date|date:"M d, Y" }}</p>
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">{{ exam.exam_type|default:"Government" }}</span>
+                        <span class="tag">{{ exam.mode|default:"Online" }}</span>
+                        <span class="tag">{{ exam.category|default:"General" }}</span>
+                        {% if exam.location %}<span class="tag">{{ exam.location }}</span>{% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'exam_detail' exam.id %}" class="btn-details">View Details</a>
+                        {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_to_calendar' %}" class="calendar-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_type" value="exam">
+                            <input type="hidden" name="item_id" value="{{ exam.id }}">
+                            <button type="submit" class="btn-calendar">
+                                <i class="fas fa-calendar-plus"></i> Add to Calendar
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Schemes Section -->
+            <h2 class="section-title">Government Schemes</h2>
+            <div class="card-grid" id="schemes-container">
+                {% for scheme in schemes %}
+                <div class="card" 
+                    data-scheme-type="{{ scheme.scheme_type|default_if_none:'central'|lower|slugify }}" 
+                    data-location="{% if scheme.location and 'ncr' in scheme.location|lower %}delhi{% else %}{{ scheme.location|default_if_none:'all-india'|lower|slugify }}{% endif %}" 
+                    data-category="{{ scheme.category|default_if_none:'general'|lower|slugify }}" 
+                    data-eligibility="{{ scheme.eligibility|default_if_none:'12th'|lower|slugify }}">
+                    
+                    <div class="card-header">
+                        <h3>{{ scheme.name }}</h3>
+                        <p class="rating"><i class="fas fa-tags"></i> {{ scheme.scheme_type|default:"Central" }}</p>
+                        {% if scheme.date %}
+                            <p class="rating"><i class="fas fa-calendar-alt"></i> {{ scheme.date|date:"M d, Y" }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-tags">
+                        <span class="tag">{{ scheme.scheme_type|default:"Central" }}</span>
+                        <span class="tag">{{ scheme.category|default:"General" }}</span>
+                        {% if scheme.location %}<span class="tag">{{ scheme.location }}</span>{% endif %}
+                        {% if scheme.eligibility %}<span class="tag">{{ scheme.eligibility }}</span>{% endif %}
+                    </div>
+
+                    <div class="card-footer">
+                        <a href="{% url 'scheme_detail' scheme.id %}" class="btn-details">View Details</a>
+                        {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_to_calendar' %}" class="calendar-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_type" value="scheme">
+                            <input type="hidden" name="item_id" value="{{ scheme.id }}">
+                            <button type="submit" class="btn-calendar">
+                                <i class="fas fa-calendar-plus"></i> Add to Calendar
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+<footer class="footer">
+    <div class="footer-links"> 
+        © 2025 PGIP | <a href="#">Policy</a> | <a href="{% url 'contact' %}">Contact Us</a>
+        <p>
+            We provide free job alert service to job seekers in India on latest government jobs and important scheme details
+        </p>
+    </div>
+</footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="{% static 'js/Dark.js' %}"></script>
+</body>
+
+</html>
