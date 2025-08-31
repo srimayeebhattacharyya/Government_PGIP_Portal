@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/dashboArd.css' %}">
+    
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <!-- Brand -->
+        <div class="nav-brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>PGIP</span>
+        </div>
+
+        <!-- Left Links -->
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="active"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a>
+            <a href="{% url 'calendar' %}"><i class="fas fa-calendar"></i> Calendar</a>
+            <a href="{% url 'recommendations' %}"><i class="fas fa-lightbulb"></i> Recommendations</a>
+            <a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact Us</a>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="nav-right">
+            <button id="dark-toggle" class="dark-btn"><i class="fas fa-moon"></i></button>
+            {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% else %}
+            <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Messages Display -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Page Layout -->
+    <div class="page-grid">
+
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+            <h3>Filters</h3>
+            <div class="filter-section">
+                <!-- Exam Type -->
+                <div class="filter-group">
+                    <h4>Exam Type</h4>
+                    <label><input type="checkbox" name="exam_type" value="Government"> Government</label>
+                    <label><input type="checkbox" name="exam_type" value="National Level"> National Level</label>
+                    <label><input type="checkbox" name="exam_type" value="Private"> Private</label>
+                    <label><input type="checkbox" name="exam_type" value="State Level"> State Level</label>
+                    <label><input type="checkbox" name="exam_type" value="University Level"> University Level</label>
+                </div>
+
+
+                
+
+
+                <div class="filter-group">
+                    <h4>Exam Category</h4>
+                    <label><input type="checkbox" name="category" value="Agriculture"> Agriculture</label>
+                    <label><input type="checkbox" name="category" value="Banking"> Banking</label>
+                    <label><input type="checkbox" name="category" value="Civil Services"> Civil Services</label>
+                    <label><input type="checkbox" name="category" value="Defense"> Defense</label>
+                    <label><input type="checkbox" name="category" value="Design"> Design</label>
+                    <label><input type="checkbox" name="category" value="Employment"> Employment</label>
+                    <label><input type="checkbox" name="category" value="Engineering"> Engineering</label>
+                    <label><input type="checkbox" name="category" value="Environment"> Environment</label>
+                    <label><input type="checkbox" name="category" value="Food Corporation"> Food Corporation</label>
+                    <label><input type="checkbox" name="category" value="Hotel Management"> Hotel Management</label>
+                    <label><input type="checkbox" name="category" value="Insurance"> Insurance</label>
+                    <label><input type="checkbox" name="category" value="Law"> Law</label>
+                    <label><input type="checkbox" name="category" value="Management"> Management</label>
+                    <label><input type="checkbox" name="category" value="Medical"> Medical</label>
+                    <label><input type="checkbox" name="category" value="Science"> Science</label>
+                    <label><input type="checkbox" name="category" value="Teaching"> Teaching</label>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Exam Eligibility</h4>
+                    <label><input type="checkbox" name="e_eligibility" value="10th Pass">10th Pass</label>
+                    <label><input type="checkbox" name="e_eligibility" value="12th Pass">12th Pass</label>
+                    <label><input type="checkbox" name="e_eligibility" value="Graduate">Graduate</label>
+                    <label><input type="checkbox" name="e_eligibility" value="Post Graduate"> Post Graduate</label>
+
+                </div>
+                <!-- Mode -->
+                <div class="filter-group">
+                    <h4>Mode</h4>
+                    <label><input type="checkbox" name="mode" value="Online"> Online</label>
+                    <label><input type="checkbox" name="mode" value="Offline"> Offline</label>
+                </div>
+
+                <!-- Scheme Type -->
+                <div class="filter-group">
+                    <h4>Scheme Type</h4>
+                    <label><input type="checkbox" name="scheme_type" value="Allowance"> Allowance</label>
+                    <label><input type="checkbox" name="scheme_type" value="Central Government"> Central
+                        Government</label>
+                    <label><input type="checkbox" name="scheme_type" value="Employment"> Employment</label>
+                    <label><input type="checkbox" name="scheme_type" value="Financial Assistance"> Financial
+                        Assistance</label>
+                    <label><input type="checkbox" name="scheme_type" value="Insurance"> Insurance</label>
+                    <label><input type="checkbox" name="scheme_type" value="Loan"> Loan</label>
+                    <label><input type="checkbox" name="scheme_type" value="Pension"> Pension</label>
+                    <label><input type="checkbox" name="scheme_type" value="Scholarship"> Scholarship</label>
+                    <label><input type="checkbox" name="scheme_type" value="State Government"> State Government</label>
+                    <label><input type="checkbox" name="scheme_type" value="Subsidy"> Subsidy</label>
+                    <label><input type="checkbox" name="scheme_type" value="Training"> Training</label>
+                    <label><input type="checkbox" name="scheme_type" value="Welfare"> Welfare</label>
+                </div>
+
+
+                <div class="filter-group">
+                    <h4>Scheme Eligibility</h4>
+                    <label><input type="checkbox" name="s_eligibility" value="10th Pass"> 10th Pass</label>
+                    <label><input type="checkbox" name="s_eligibility" value="12th Pass"> 12th Pass</label>
+                    <label><input type="checkbox" name="s_eligibility" value="18+ years"> 18+ years</label>
+                    <label><input type="checkbox" name="s_eligibility" value="18-40 years"> 18-40 years</label>
+                    <label><input type="checkbox" name="s_eligibility" value="18-50 years"> 18-50 years</label>
+                    <label><input type="checkbox" name="s_eligibility" value="18-70 years"> 18-70 years</label>
+                    <label><input type="checkbox" name="s_eligibility" value="All Residents"> All Residents</label>
+                    <label><input type="checkbox" name="s_eligibility" value="BPL Families"> BPL Families</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Farmers"> Farmers</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Girl Students"> Girl Students</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Girls from BPL families"> Girls from BPL
+                        families</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Graduate"> Graduate</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Graduate, Unemployed"> Graduate,
+                        Unemployed</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Low Income"> Low Income</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Open to All"> Open to All</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Postgraduate"> Postgraduate</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Rural Population"> Rural
+                        Population</label>
+                    <label><input type="checkbox" name="s_eligibility" value="SC/ST/Women"> SC/ST/Women</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Senior Citizens"> Senior Citizens</label>
+                    <label><input type="checkbox" name="s_eligibility" value="Startups registered in Delhi"> Startups
+                        registered in Delhi</label>
+                    <label><input type="checkbox" name="s_eligibility" value="State Residents"> State Residents</label>
+                </div>
+
+<!-- Location -->
+                <div class="filter-group">
+                    <h4>Location</h4>
+                    <label><input type="checkbox" name="location" value="Ahmedabad"> Ahmedabad</label>
+                    <label><input type="checkbox" name="location" value="All India"> All India</label>
+                    <label><input type="checkbox" name="location" value="Andhra Pradesh"> Andhra Pradesh</label>
+                    <label><input type="checkbox" name="location" value="Chhattisgarh"> Chhattisgarh</label>
+                    <label><input type="checkbox" name="location" value="Delhi"> Delhi</label>
+                    <label><input type="checkbox" name="location" value="Gujarat"> Gujarat</label>
+                    <label><input type="checkbox" name="location" value="Hyderabad"> Hyderabad</label>
+                    <label><input type="checkbox" name="location" value="Karnataka"> Karnataka</label>
+                    <label><input type="checkbox" name="location" value="Kerala"> Kerala</label>
+                    <label><input type="checkbox" name="location" value="Madhya Pradesh"> Madhya Pradesh</label>
+                    <label><input type="checkbox" name="location" value="Maharashtra"> Maharashtra</label>
+                    <label><input type="checkbox" name="location" value="Multiple Cities"> Multiple Cities</label>
+                    <label><input type="checkbox" name="location" value="Odisha"> Odisha</label>
+                    <label><input type="checkbox" name="location" value="Rural India"> Rural India</label>
+                    <label><input type="checkbox" name="location" value="Tamil Nadu"> Tamil Nadu</label>
+                    <label><input type="checkbox" name="location" value="Telangana"> Telangana</label>
+                    <label><input type="checkbox" name="location" value="Uttarakhand"> Uttarakhand</label>
+                    <label><input type="checkbox" name="location" value="West Bengal"> West Bengal</label>
+                </div>
+                <!-- Sort -->
+                <div class="filter-group">
+                    <h4>Sort By</h4>
+                    <select name="sort" id="sort-by">
+                        <option value="date_asc">Date (Oldest First)</option>
+                        <option value="date_desc" selected>Date (Newest First)</option>
+                        <option value="name_asc">Name (A-Z)</option>
+                        <option value="name_desc">Name (Z-A)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-buttons">
+                <button type="button" id="apply-filters" class="filter-button">Apply Filters</button>
+                <button type="button" id="reset-filters" class="filter-button">Reset Filters</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content">
+
+            <!-- Search -->
+            <form method="get" action="{% url 'search_results' %}" class="search-bar">
+                <input type="text" name="q" placeholder="Search exams or schemes..." required>
+                <button type="submit">Search</button>
+            </form>
+
+            <!-- Exams Section -->
+            <h2 class="section-title">Upcoming Exams</h2>
+            <div class="card-grid" id="exams-container">
+                {% for exam in exams %}
+                <div class="card exam-card" 
+    data-exam-type="{{ exam.exam_type }}" 
+    data-location="{{ exam.location }}"
+    data-category="{{ exam.category }}" 
+    data-mode="{{ exam.mode }}"
+    data-e_eligibility="{{ exam.e_eligibility|default:'' }}"
+    data-date="{{ exam.date|date:'Y-m-d' }}">
+
+                    <div class="card-header">
+                        <h3>{{ exam.name }}</h3>
+                        <p class="rating"><i class="fas fa-calendar-alt"></i> {{ exam.date|date:"M d, Y" }}</p>
+                    </div>
+                    <div class="card-tags">
+    <span class="tag">{{ exam.exam_type|default:"Government" }}</span>
+    <span class="tag">{{ exam.mode|default:"Online" }}</span>
+    <span class="tag">{{ exam.category|default:"General" }}</span>
+    {% if exam.location %}<span class="tag">{{ exam.location }}</span>{% endif %}
+    {% if exam.e_eligibility %}<span class="tag">{{ exam.e_eligibility }}</span>{% endif %}
+</div>
+
+                    <div class="card-footer">
+                        <a href="{% url 'exam_detail' exam.id %}" class="btn-details">View Details</a>
+                        {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_to_calendar' %}" class="calendar-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_type" value="exam">
+                            <input type="hidden" name="item_id" value="{{ exam.id }}">
+                            <button type="submit" class="btn-calendar">
+                                <i class="fas fa-calendar-plus"></i> Add to Calendar
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="no-results" id="exams-no-results" style="display: none;">
+                    No exams match your filter criteria.
+                </div>
+            </div>
+
+            <!-- Schemes Section -->
+            <h2 class="section-title">Government Schemes</h2>
+            <div class="card-grid" id="schemes-container">
+                {% for scheme in schemes %}
+                <div class="card scheme-card" data-scheme-type="{{ scheme.scheme_type }}"
+                    data-location="{{ scheme.location }}" data-category="{{ scheme.category }}"
+                    data-s_eligibility="{{ scheme.s_eligibility|default:'' }}"
+                    data-date="{{ scheme.date|date:'Y-m-d' }}">
+
+                    <div class="card-header">
+                        <h3>{{ scheme.name }}</h3>
+                        <p class="rating"><i class="fas fa-tags"></i> {{ scheme.scheme_type|default:"Central" }}</p>
+                        {% if scheme.date %}
+                        <p class="rating"><i class="fas fa-calendar-alt"></i> {{ scheme.date|date:"M d, Y" }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-tags">
+                        <span class="tag">{{ scheme.scheme_type|default:"Central" }}</span>
+                        <span class="tag">{{ scheme.category|default:"General" }}</span>
+                        {% if scheme.location %}<span class="tag">{{ scheme.location }}</span>{% endif %}
+                        {% if scheme.s_eligibility %}<span class="tag">{{ scheme.s_eligibility }}</span>{% endif %}
+                    </div>
+
+                    <div class="card-footer">
+                        <a href="{% url 'scheme_detail' scheme.id %}" class="btn-details">View Details</a>
+                        {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_to_calendar' %}" class="calendar-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_type" value="scheme">
+                            <input type="hidden" name="item_id" value="{{ scheme.id }}">
+                            <button type="submit" class="btn-calendar">
+                                <i class="fas fa-calendar-plus"></i> Add to Calendar
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="no-results" id="schemes-no-results" style="display: none;">
+                    No schemes match your filter criteria.
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="footer">
+        <div class="footer-links">
+            © 2025 PGIP | <a href="#">Policy</a> | <a href="{% url 'contact' %}">Contact Us</a>
+            <p>
+                We provide free job alert service to job seekers in India on latest government jobs and important scheme
+                details
+            </p>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="{% static 'js/Dark.js' %}"></script>
+</body>
+
+</html>

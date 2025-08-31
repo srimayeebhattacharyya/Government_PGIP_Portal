@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/ConTaCtS.css' %}">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+      <!-- Brand -->
+      <div class="nav-brand">
+          <i class="fas fa-graduation-cap"></i>
+          <span>PGIP</span>
+      </div>
+
+      <!-- Left Links -->
+      <div class="nav-left">
+          <a href="{% url 'dashboard' %}"><i class="fas fa-th-large"></i> Dashboard</a>
+          <a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a>
+          <a href="{% url 'calendar' %}"><i class="fas fa-calendar"></i> Calendar</a>
+          <a href="{% url 'recommendations' %}"><i class="fas fa-lightbulb"></i> Recommendations</a>
+          <a href="{% url 'contact' %}" class="active"><i class="fas fa-envelope"></i> Contact Us</a>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="nav-right">
+          <button id="dark-toggle" class="dark-btn"><i class="fas fa-moon"></i></button>
+          {% if user.is_authenticated %}
+              <a href="{% url 'logout' %}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          {% else %}
+              <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+          {% endif %}
+      </div>
+
+      
+  </div>
+
+  <!-- Contact Section -->
+  <div class="contact-container">
+    <div class="contact-card">
+      <h1>Get in Touch</h1>
+      <p class="subtitle">We'd love to hear from you! Reach out to us through any of the following:</p>
+      
+      <div class="contact-methods">
+        <!-- Email -->
+        <div class="contact-method">
+          <div class="contact-icon">📧</div>
+          <div class="contact-details">
+            <h3>Email</h3>
+            <a href="mailto:support@example.com">support@example.com</a>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="contact-method">
+          <div class="contact-icon">📱</div>
+          <div class="contact-details">
+            <h3>Phone</h3>
+            <a href="tel:+911234567890">+91-1234567890</a>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="contact-method">
+          <div class="contact-icon">📍</div>
+          <div class="contact-details">
+            <h3>Address</h3>
+            <p>Barrackpore, West Bengal, India</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<script src="{% static 'js/Dark.js' %}"></script>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-links"> 
+        © 2025 PGIP | <a href="#">Policy</a> | <a href="{% url 'contact' %}">Contact Us</a>
+        <p>
+            We provide free job alert service to job seekers in India on latest government jobs and important scheme details
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>
