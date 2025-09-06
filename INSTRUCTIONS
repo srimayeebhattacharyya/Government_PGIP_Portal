@@ -1,0 +1,7 @@
+activate the virtual env
+runser 
+
+if any changes made in the code then->
+    git add .
+    git commit -m "describe what you changed"
+    git push origin main
