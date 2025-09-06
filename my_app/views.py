@@ -456,10 +456,14 @@ def profile_view(request):
 
 @login_required
 def recommendations_view(request):
-    profile = UserProfile.objects.get(user=request.user)
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
 
-    # split comma interests: "tech, govt, edu"
-    interests = [i.strip().lower() for i in profile.interests.split(",") if i.strip()]
+    # Safely handle missing/empty interests
+    if profile.interests:
+        interests = [i.strip().lower() for i in profile.interests.split(",") if i.strip()]
+    else:
+        interests = []
+
     user_location = profile.location if profile.location else ""
 
     # ✅ mapping aligned with Exam.CATEGORY_CHOICES and Scheme.CATEGORY_CHOICES
@@ -472,7 +476,7 @@ def recommendations_view(request):
         'law': 'Law',
         'management': 'Management',
         'defense': 'Defense',
-        'env':'Environment',
+        'env': 'Environment',
     }
 
     interest_mapping_schemes = {
@@ -483,8 +487,8 @@ def recommendations_view(request):
         'welfare': 'Welfare',
         'startup': 'Entrepreneurship',
         'general': 'General',
-        'env':'Environment',
-        'scholarships':'Scholarships'
+        'env': 'Environment',
+        'scholarships': 'Scholarship',  # Fix spelling too
     }
 
     exams = Exam.objects.none()
@@ -492,7 +496,6 @@ def recommendations_view(request):
 
     if interests:
         for interest in interests:
-            # ✅ Exams mapping
             mapped_exam_value = interest_mapping_exams.get(interest)
             if mapped_exam_value:
                 exams |= Exam.objects.filter(category__icontains=mapped_exam_value)
@@ -502,7 +505,6 @@ def recommendations_view(request):
                         category__icontains=mapped_exam_value
                     )
 
-            # ✅ Schemes mapping
             mapped_scheme_value = interest_mapping_schemes.get(interest)
             if mapped_scheme_value:
                 schemes |= Scheme.objects.filter(category__icontains=mapped_scheme_value)
@@ -519,6 +521,7 @@ def recommendations_view(request):
         'user_location': user_location,
     }
     return render(request, 'recommendations.html', context)
+
 
 def details_view(request, item_type, item_id):
     if item_type == 'exam':
