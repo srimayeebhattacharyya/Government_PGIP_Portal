@@ -1,10 +1,21 @@
-# Government_PGIP_Portal
-Personalized Government Info Portal (PGIP)
+Government_PGIP_Portal
 
-In today's digital age, individuals often struggle to stay updated with relevant government schemes, exams, and tax-related information due to the vast amount of scattered data. This project aims to develop a Personalized Government Info Portal (PGIP) — a smart web application that centralizes and customizes government-related information for each user based on their personal and professional profiles.
+Personalized Government Information Portal (PGIP)
 
-The system allows users to create accounts by entering detailed personal data including age, gender, educational qualification, income status, employment type, domicile state, and more. Using this information, the portal will dynamically filter and display relevant government schemes, competitive exam notifications, and tax-related updates* specific to the user's profile.
+In today’s digital landscape, individuals often face challenges in keeping track of government schemes, competitive exams, and tax-related updates due to scattered and overwhelming information sources. The Personalized Government Information Portal (PGIP) aims to solve this problem by providing a centralized, smart web application that delivers tailored government information to each user based on their personal and professional profile.
 
-The platform integrates AI-powered recommendation systems and rule-based filtering mechanisms to ensure accurate content delivery. Users will also receive personalized alerts, document checklists, and eligibility notifications to streamline their application processes.
+Users can create accounts and provide details such as age, gender, education, employment type, income status, domicile state, and more. Leveraging this data, the system dynamically filters and presents relevant schemes, exam notifications, and tax updates aligned with the user’s eligibility and interests.
 
-This solution addresses the information overload problem and ensures efficient dissemination of government services, fostering greater public awareness, engagement, and accessibility — especially for underserved populations.
+The platform integrates AI-powered recommendation engines and rule-based filtering mechanisms to ensure accurate and personalized content delivery. Users also benefit from:
+
+Personalized alerts and notifications
+
+Eligibility-based scheme recommendations
+
+Document checklists for applications
+
+Streamlined updates on government services
+
+By addressing the issue of information overload, PGIP ensures greater accessibility, awareness, and engagement with government initiatives — particularly benefiting underserved populations.
+
+🔗 Live Deployment: https://pgip-yn5d.onrender.com/
